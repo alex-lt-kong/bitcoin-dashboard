@@ -6,31 +6,32 @@ import axios from 'axios';
 
 import ReactWeather, { useOpenWeather } from 'react-open-weather';
 
-const WeatherPrimary = (d) => {
-  const { data, isLoading, errorMessage } = useOpenWeather(d.d);
+const WeatherPrimary = (props) => {
+  const { data, isLoading, errorMessage } = useOpenWeather(props.weatherData);
+  console.log(props);
   return (
       <ReactWeather
         isLoading={isLoading}
         errorMessage={errorMessage}
         data={data}
         lang="en"
-        locationLabel={d.d.locationLabel}
-        unitsLabels={{ temperature: '°C', windSpeed: 'Km/h' }}
+        locationLabel={`${props.weatherData.locationLabel} (${props.tempSensorReading}°C)`}
+        unitsLabels={{ temperature: `°C` , windSpeed: 'Km/h' }}
         showForecast={true}
       />
   );
 };
 
 
-const WeatherSecondary = (d1) => {
-  const { data, isLoading, errorMessage } = useOpenWeather(d1.d);
+const WeatherSecondary = (props) => {
+  const { data, isLoading, errorMessage } = useOpenWeather(props.weatherData);
   return (
       <ReactWeather
         isLoading={isLoading}
         errorMessage={errorMessage}
         data={data}
         lang="en"
-        locationLabel={d1.d.locationLabel}
+        locationLabel={props.weatherData.locationLabel}
         unitsLabels={{ temperature: '°C', windSpeed: 'Km/h' }}
         showForecast={false}
       />
@@ -40,6 +41,10 @@ const WeatherSecondary = (d1) => {
 class Index extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      tempSensorReading: 3276.7,
+      weatherData: null
+    }
   }
 
   componentDidMount() {
@@ -50,7 +55,13 @@ class Index extends React.Component {
         .catch((error) => {
           console.log(error);
         });
-
+    axios.get(`../getTempSensorReading/`)
+        .then((response) => {
+          this.setState({tempSensorReading: response.data.data});
+        })
+        .catch((error) => {
+          console.log(error);
+        });
   }
   render() {
     
@@ -60,17 +71,21 @@ class Index extends React.Component {
     if (this.state.weatherData === null) {
       return null;
     }
+
     console.log(this.state.weatherData);
+    console.log(this.state.tempSensorReading);
     return (
       <Box sx={{ flexGrow: 1 }}>
         <Grid container spacing={2}>
-          <Grid item md={4}>
+          <Grid item md={5}>
             <div>
-              <WeatherPrimary d={this.state.weatherData.primary} /> 
-              <WeatherSecondary d={this.state.weatherData.secondary} />
+              <WeatherPrimary
+                weatherData={this.state.weatherData.primary} tempSensorReading={this.state.tempSensorReading}
+              /> 
+              <WeatherSecondary weatherData={this.state.weatherData.secondary} />
             </div>
           </Grid>
-          <Grid item md={8}>
+          <Grid item md={7}>
             Empty
           </Grid>
         </Grid>

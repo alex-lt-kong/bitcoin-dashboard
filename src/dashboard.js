@@ -1,10 +1,14 @@
 
 const express = require('express');
+const execSync = require('child_process').execSync;
 const https = require('https');
 const fs = require('fs');
+const path = require('path');
+
 const app = express()
 const configs = require('./config.js').configs;
-const path = require('path');
+
+
 
 https.createServer(
   {
@@ -23,6 +27,15 @@ app.use('/', express.static(path.join(__dirname, 'public/')));
 app.use('/configWeatherData/', (req, res) => {
   res.json(configs.weatherData);
 });
+
+app.use('/getTempSensorReading/', (req, res) => {
+  const result = execSync(`${__dirname}/usb-iot-device-control/temp-sensor.out ${configs.tempSensorPath} 0`).toString();
+  res.json({data: parseInt(result)/10.0});
+});
+
+
+
+
 
 app.use('/', (req, res) => {
   return res.redirect('/html/index.html');
