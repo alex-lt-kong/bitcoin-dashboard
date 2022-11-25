@@ -15,8 +15,8 @@ const WeatherPrimary = (props) => {
         errorMessage={errorMessage}
         data={data}
         lang="en"
-        locationLabel={`${props.weatherData.locationLabel} (${props.tempSensorReading}°C)`}
-        sensorReading={props.tempSensorReading}
+        locationLabel={`${props.weatherData.locationLabel}`}
+        tempSensorReading={props.tempSensorReading}
         unitsLabels={{ temperature: `°C` , windSpeed: 'Km/h' }}
         showForecast={true}
       />
@@ -78,7 +78,7 @@ class Index extends React.Component {
     return (
       <Box sx={{ flexGrow: 1 }}>
         <Grid container spacing={2}>
-          <Grid item md={5}>
+          <Grid item md={6}>
             <div>
               <WeatherPrimary
                 weatherData={this.state.weatherData.primary} tempSensorReading={this.state.tempSensorReading}
@@ -86,7 +86,7 @@ class Index extends React.Component {
               <WeatherSecondary weatherData={this.state.weatherData.secondary} />
             </div>
           </Grid>
-          <Grid item md={7}>
+          <Grid item md={6}>
             Empty
           </Grid>
         </Grid>

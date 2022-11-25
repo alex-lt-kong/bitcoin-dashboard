@@ -34,9 +34,6 @@ app.use('/getTempSensorReading/', (req, res) => {
 });
 
 
-
-
-
 app.use('/', (req, res) => {
   return res.redirect('/html/index.html');
 });
