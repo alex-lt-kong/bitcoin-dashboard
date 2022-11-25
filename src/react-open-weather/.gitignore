@@ -1,0 +1,16 @@
+#node modules
+node_modules
+npm-debug.log
+
+# #dist
+lib
+
+#coverage
+coverage
+
+# OSX files
+.DS_Store
+.vscode
+
+#docs
+docs/_site
