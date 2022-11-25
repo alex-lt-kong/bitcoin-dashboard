@@ -16,6 +16,7 @@ const WeatherPrimary = (props) => {
         data={data}
         lang="en"
         locationLabel={`${props.weatherData.locationLabel} (${props.tempSensorReading}°C)`}
+        sensorReading={props.tempSensorReading}
         unitsLabels={{ temperature: `°C` , windSpeed: 'Km/h' }}
         showForecast={true}
       />
