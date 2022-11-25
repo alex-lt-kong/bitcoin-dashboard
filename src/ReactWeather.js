@@ -5186,7 +5186,7 @@ var Today = function Today(_ref) {
     className: "rw-today-hr"
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     className: "rw-today-current"
-  }, current.temperature.current, " ", unitsLabels.temperature, " AlexK"), hasRange && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+  }, current.temperature.current, " ", unitsLabels.temperature, " AK"), hasRange && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     className: "rw-today-range"
   }, current.temperature.max, " / ", current.temperature.min, ' ', unitsLabels.temperature), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     className: "rw-today-desc"
