@@ -4847,8 +4847,8 @@ var _default = Forecast;
     return;
   }
 
-  reactHotLoader.register(Forecast, "Forecast", "/home/akong_yin/my-repos/react-open-weather/src/js/components/Forecast.js");
-  reactHotLoader.register(_default, "default", "/home/akong_yin/my-repos/react-open-weather/src/js/components/Forecast.js");
+  reactHotLoader.register(Forecast, "Forecast", "/home/akong_yin/my-repos/dashboard/src/react-open-weather/src/js/components/Forecast.js");
+  reactHotLoader.register(_default, "default", "/home/akong_yin/my-repos/dashboard/src/react-open-weather/src/js/components/Forecast.js");
 })();
 
 ;
@@ -4922,7 +4922,7 @@ var StyledDaysPanel = _emotion_styled__WEBPACK_IMPORTED_MODULE_1__["default"].di
     return;
   }
 
-  reactHotLoader.register(StyledDaysPanel, "StyledDaysPanel", "/home/akong_yin/my-repos/react-open-weather/src/js/components/Forecast.styles.js");
+  reactHotLoader.register(StyledDaysPanel, "StyledDaysPanel", "/home/akong_yin/my-repos/dashboard/src/react-open-weather/src/js/components/Forecast.styles.js");
 })();
 
 ;
@@ -5060,8 +5060,8 @@ var _default = ReactWeather;
     return;
   }
 
-  reactHotLoader.register(ReactWeather, "ReactWeather", "/home/akong_yin/my-repos/react-open-weather/src/js/components/ReactWeather.js");
-  reactHotLoader.register(_default, "default", "/home/akong_yin/my-repos/react-open-weather/src/js/components/ReactWeather.js");
+  reactHotLoader.register(ReactWeather, "ReactWeather", "/home/akong_yin/my-repos/dashboard/src/react-open-weather/src/js/components/ReactWeather.js");
+  reactHotLoader.register(_default, "default", "/home/akong_yin/my-repos/dashboard/src/react-open-weather/src/js/components/ReactWeather.js");
 })();
 
 ;
@@ -5126,7 +5126,7 @@ var StyledContainer = _emotion_styled__WEBPACK_IMPORTED_MODULE_1__["default"].di
     return;
   }
 
-  reactHotLoader.register(StyledContainer, "StyledContainer", "/home/akong_yin/my-repos/react-open-weather/src/js/components/ReactWeather.styles.js");
+  reactHotLoader.register(StyledContainer, "StyledContainer", "/home/akong_yin/my-repos/dashboard/src/react-open-weather/src/js/components/ReactWeather.styles.js");
 })();
 
 ;
@@ -5186,7 +5186,7 @@ var Today = function Today(_ref) {
     className: "rw-today-hr"
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     className: "rw-today-current"
-  }, current.temperature.current, " ", unitsLabels.temperature, " 'HI!'"), hasRange && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+  }, current.temperature.current, " ", unitsLabels.temperature, " Hello"), hasRange && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     className: "rw-today-range"
   }, current.temperature.max, " / ", current.temperature.min, ' ', unitsLabels.temperature), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     className: "rw-today-desc"
@@ -5214,8 +5214,8 @@ var _default = Today;
     return;
   }
 
-  reactHotLoader.register(Today, "Today", "/home/akong_yin/my-repos/react-open-weather/src/js/components/Today.js");
-  reactHotLoader.register(_default, "default", "/home/akong_yin/my-repos/react-open-weather/src/js/components/Today.js");
+  reactHotLoader.register(Today, "Today", "/home/akong_yin/my-repos/dashboard/src/react-open-weather/src/js/components/Today.js");
+  reactHotLoader.register(_default, "default", "/home/akong_yin/my-repos/dashboard/src/react-open-weather/src/js/components/Today.js");
 })();
 
 ;
@@ -5280,7 +5280,7 @@ var StyledtodayPanel = _emotion_styled__WEBPACK_IMPORTED_MODULE_1__["default"].d
     return;
   }
 
-  reactHotLoader.register(StyledtodayPanel, "StyledtodayPanel", "/home/akong_yin/my-repos/react-open-weather/src/js/components/Today.styles.js");
+  reactHotLoader.register(StyledtodayPanel, "StyledtodayPanel", "/home/akong_yin/my-repos/dashboard/src/react-open-weather/src/js/components/Today.styles.js");
 })();
 
 ;
@@ -5372,9 +5372,9 @@ var _default = WeatherIcon;
     return;
   }
 
-  reactHotLoader.register(StyledSVG, "StyledSVG", "/home/akong_yin/my-repos/react-open-weather/src/js/components/WeatherIcon.js");
-  reactHotLoader.register(WeatherIcon, "WeatherIcon", "/home/akong_yin/my-repos/react-open-weather/src/js/components/WeatherIcon.js");
-  reactHotLoader.register(_default, "default", "/home/akong_yin/my-repos/react-open-weather/src/js/components/WeatherIcon.js");
+  reactHotLoader.register(StyledSVG, "StyledSVG", "/home/akong_yin/my-repos/dashboard/src/react-open-weather/src/js/components/WeatherIcon.js");
+  reactHotLoader.register(WeatherIcon, "WeatherIcon", "/home/akong_yin/my-repos/dashboard/src/react-open-weather/src/js/components/WeatherIcon.js");
+  reactHotLoader.register(_default, "default", "/home/akong_yin/my-repos/dashboard/src/react-open-weather/src/js/components/WeatherIcon.js");
 })();
 
 ;
@@ -5437,7 +5437,7 @@ var _default = {
     return;
   }
 
-  reactHotLoader.register(_default, "default", "/home/akong_yin/my-repos/react-open-weather/src/js/defaultTheme.js");
+  reactHotLoader.register(_default, "default", "/home/akong_yin/my-repos/dashboard/src/react-open-weather/src/js/defaultTheme.js");
 })();
 
 ;
@@ -5492,7 +5492,7 @@ var _default = _components_ReactWeather__WEBPACK_IMPORTED_MODULE_0__["default"];
     return;
   }
 
-  reactHotLoader.register(_default, "default", "/home/akong_yin/my-repos/react-open-weather/src/js/index.js");
+  reactHotLoader.register(_default, "default", "/home/akong_yin/my-repos/dashboard/src/react-open-weather/src/js/index.js");
 })();
 
 ;
@@ -5660,7 +5660,7 @@ var langText = {
     return;
   }
 
-  reactHotLoader.register(langText, "langText", "/home/akong_yin/my-repos/react-open-weather/src/js/lang.js");
+  reactHotLoader.register(langText, "langText", "/home/akong_yin/my-repos/dashboard/src/react-open-weather/src/js/lang.js");
 })();
 
 ;
@@ -5731,8 +5731,8 @@ var getIcon = function getIcon(name) {
     return;
   }
 
-  reactHotLoader.register(iconsMap, "iconsMap", "/home/akong_yin/my-repos/react-open-weather/src/js/providers/openweather/iconsMap.js");
-  reactHotLoader.register(getIcon, "getIcon", "/home/akong_yin/my-repos/react-open-weather/src/js/providers/openweather/iconsMap.js");
+  reactHotLoader.register(iconsMap, "iconsMap", "/home/akong_yin/my-repos/dashboard/src/react-open-weather/src/js/providers/openweather/iconsMap.js");
+  reactHotLoader.register(getIcon, "getIcon", "/home/akong_yin/my-repos/dashboard/src/react-open-weather/src/js/providers/openweather/iconsMap.js");
 })();
 
 ;
@@ -5978,16 +5978,16 @@ var _default = useOpenWeather;
     return;
   }
 
-  reactHotLoader.register(formatDate, "formatDate", "/home/akong_yin/my-repos/react-open-weather/src/js/providers/openweather/useOpenWeather.js");
-  reactHotLoader.register(mapCurrent, "mapCurrent", "/home/akong_yin/my-repos/react-open-weather/src/js/providers/openweather/useOpenWeather.js");
-  reactHotLoader.register(mapForecast, "mapForecast", "/home/akong_yin/my-repos/react-open-weather/src/js/providers/openweather/useOpenWeather.js");
-  reactHotLoader.register(mapData, "mapData", "/home/akong_yin/my-repos/react-open-weather/src/js/providers/openweather/useOpenWeather.js");
-  reactHotLoader.register(SUCCESS, "SUCCESS", "/home/akong_yin/my-repos/react-open-weather/src/js/providers/openweather/useOpenWeather.js");
-  reactHotLoader.register(FAILURE, "FAILURE", "/home/akong_yin/my-repos/react-open-weather/src/js/providers/openweather/useOpenWeather.js");
-  reactHotLoader.register(initialState, "initialState", "/home/akong_yin/my-repos/react-open-weather/src/js/providers/openweather/useOpenWeather.js");
-  reactHotLoader.register(fetchReducer, "fetchReducer", "/home/akong_yin/my-repos/react-open-weather/src/js/providers/openweather/useOpenWeather.js");
-  reactHotLoader.register(useOpenWeather, "useOpenWeather", "/home/akong_yin/my-repos/react-open-weather/src/js/providers/openweather/useOpenWeather.js");
-  reactHotLoader.register(_default, "default", "/home/akong_yin/my-repos/react-open-weather/src/js/providers/openweather/useOpenWeather.js");
+  reactHotLoader.register(formatDate, "formatDate", "/home/akong_yin/my-repos/dashboard/src/react-open-weather/src/js/providers/openweather/useOpenWeather.js");
+  reactHotLoader.register(mapCurrent, "mapCurrent", "/home/akong_yin/my-repos/dashboard/src/react-open-weather/src/js/providers/openweather/useOpenWeather.js");
+  reactHotLoader.register(mapForecast, "mapForecast", "/home/akong_yin/my-repos/dashboard/src/react-open-weather/src/js/providers/openweather/useOpenWeather.js");
+  reactHotLoader.register(mapData, "mapData", "/home/akong_yin/my-repos/dashboard/src/react-open-weather/src/js/providers/openweather/useOpenWeather.js");
+  reactHotLoader.register(SUCCESS, "SUCCESS", "/home/akong_yin/my-repos/dashboard/src/react-open-weather/src/js/providers/openweather/useOpenWeather.js");
+  reactHotLoader.register(FAILURE, "FAILURE", "/home/akong_yin/my-repos/dashboard/src/react-open-weather/src/js/providers/openweather/useOpenWeather.js");
+  reactHotLoader.register(initialState, "initialState", "/home/akong_yin/my-repos/dashboard/src/react-open-weather/src/js/providers/openweather/useOpenWeather.js");
+  reactHotLoader.register(fetchReducer, "fetchReducer", "/home/akong_yin/my-repos/dashboard/src/react-open-weather/src/js/providers/openweather/useOpenWeather.js");
+  reactHotLoader.register(useOpenWeather, "useOpenWeather", "/home/akong_yin/my-repos/dashboard/src/react-open-weather/src/js/providers/openweather/useOpenWeather.js");
+  reactHotLoader.register(_default, "default", "/home/akong_yin/my-repos/dashboard/src/react-open-weather/src/js/providers/openweather/useOpenWeather.js");
 })();
 
 ;
@@ -6056,8 +6056,8 @@ var getIcon = function getIcon(name) {
     return;
   }
 
-  reactHotLoader.register(iconsMap, "iconsMap", "/home/akong_yin/my-repos/react-open-weather/src/js/providers/visualcrossing/iconsMap.js");
-  reactHotLoader.register(getIcon, "getIcon", "/home/akong_yin/my-repos/react-open-weather/src/js/providers/visualcrossing/iconsMap.js");
+  reactHotLoader.register(iconsMap, "iconsMap", "/home/akong_yin/my-repos/dashboard/src/react-open-weather/src/js/providers/visualcrossing/iconsMap.js");
+  reactHotLoader.register(getIcon, "getIcon", "/home/akong_yin/my-repos/dashboard/src/react-open-weather/src/js/providers/visualcrossing/iconsMap.js");
 })();
 
 ;
@@ -6321,16 +6321,16 @@ var _default = useVisualCrossing;
     return;
   }
 
-  reactHotLoader.register(formatDate, "formatDate", "/home/akong_yin/my-repos/react-open-weather/src/js/providers/visualcrossing/useVisualCrossing.js");
-  reactHotLoader.register(mapCurrent, "mapCurrent", "/home/akong_yin/my-repos/react-open-weather/src/js/providers/visualcrossing/useVisualCrossing.js");
-  reactHotLoader.register(mapForecast, "mapForecast", "/home/akong_yin/my-repos/react-open-weather/src/js/providers/visualcrossing/useVisualCrossing.js");
-  reactHotLoader.register(mapData, "mapData", "/home/akong_yin/my-repos/react-open-weather/src/js/providers/visualcrossing/useVisualCrossing.js");
-  reactHotLoader.register(SUCCESS, "SUCCESS", "/home/akong_yin/my-repos/react-open-weather/src/js/providers/visualcrossing/useVisualCrossing.js");
-  reactHotLoader.register(FAILURE, "FAILURE", "/home/akong_yin/my-repos/react-open-weather/src/js/providers/visualcrossing/useVisualCrossing.js");
-  reactHotLoader.register(initialState, "initialState", "/home/akong_yin/my-repos/react-open-weather/src/js/providers/visualcrossing/useVisualCrossing.js");
-  reactHotLoader.register(fetchReducer, "fetchReducer", "/home/akong_yin/my-repos/react-open-weather/src/js/providers/visualcrossing/useVisualCrossing.js");
-  reactHotLoader.register(useVisualCrossing, "useVisualCrossing", "/home/akong_yin/my-repos/react-open-weather/src/js/providers/visualcrossing/useVisualCrossing.js");
-  reactHotLoader.register(_default, "default", "/home/akong_yin/my-repos/react-open-weather/src/js/providers/visualcrossing/useVisualCrossing.js");
+  reactHotLoader.register(formatDate, "formatDate", "/home/akong_yin/my-repos/dashboard/src/react-open-weather/src/js/providers/visualcrossing/useVisualCrossing.js");
+  reactHotLoader.register(mapCurrent, "mapCurrent", "/home/akong_yin/my-repos/dashboard/src/react-open-weather/src/js/providers/visualcrossing/useVisualCrossing.js");
+  reactHotLoader.register(mapForecast, "mapForecast", "/home/akong_yin/my-repos/dashboard/src/react-open-weather/src/js/providers/visualcrossing/useVisualCrossing.js");
+  reactHotLoader.register(mapData, "mapData", "/home/akong_yin/my-repos/dashboard/src/react-open-weather/src/js/providers/visualcrossing/useVisualCrossing.js");
+  reactHotLoader.register(SUCCESS, "SUCCESS", "/home/akong_yin/my-repos/dashboard/src/react-open-weather/src/js/providers/visualcrossing/useVisualCrossing.js");
+  reactHotLoader.register(FAILURE, "FAILURE", "/home/akong_yin/my-repos/dashboard/src/react-open-weather/src/js/providers/visualcrossing/useVisualCrossing.js");
+  reactHotLoader.register(initialState, "initialState", "/home/akong_yin/my-repos/dashboard/src/react-open-weather/src/js/providers/visualcrossing/useVisualCrossing.js");
+  reactHotLoader.register(fetchReducer, "fetchReducer", "/home/akong_yin/my-repos/dashboard/src/react-open-weather/src/js/providers/visualcrossing/useVisualCrossing.js");
+  reactHotLoader.register(useVisualCrossing, "useVisualCrossing", "/home/akong_yin/my-repos/dashboard/src/react-open-weather/src/js/providers/visualcrossing/useVisualCrossing.js");
+  reactHotLoader.register(_default, "default", "/home/akong_yin/my-repos/dashboard/src/react-open-weather/src/js/providers/visualcrossing/useVisualCrossing.js");
 })();
 
 ;
@@ -6421,8 +6421,8 @@ var getIcon = function getIcon(name) {
     return;
   }
 
-  reactHotLoader.register(iconsMap, "iconsMap", "/home/akong_yin/my-repos/react-open-weather/src/js/providers/weatherbit/iconsMap.js");
-  reactHotLoader.register(getIcon, "getIcon", "/home/akong_yin/my-repos/react-open-weather/src/js/providers/weatherbit/iconsMap.js");
+  reactHotLoader.register(iconsMap, "iconsMap", "/home/akong_yin/my-repos/dashboard/src/react-open-weather/src/js/providers/weatherbit/iconsMap.js");
+  reactHotLoader.register(getIcon, "getIcon", "/home/akong_yin/my-repos/dashboard/src/react-open-weather/src/js/providers/weatherbit/iconsMap.js");
 })();
 
 ;
@@ -6672,16 +6672,16 @@ var _default = useWeatherBit;
     return;
   }
 
-  reactHotLoader.register(SUCCESS, "SUCCESS", "/home/akong_yin/my-repos/react-open-weather/src/js/providers/weatherbit/useWeatherBit.js");
-  reactHotLoader.register(FAILURE, "FAILURE", "/home/akong_yin/my-repos/react-open-weather/src/js/providers/weatherbit/useWeatherBit.js");
-  reactHotLoader.register(initialState, "initialState", "/home/akong_yin/my-repos/react-open-weather/src/js/providers/weatherbit/useWeatherBit.js");
-  reactHotLoader.register(fetchReducer, "fetchReducer", "/home/akong_yin/my-repos/react-open-weather/src/js/providers/weatherbit/useWeatherBit.js");
-  reactHotLoader.register(formatDate, "formatDate", "/home/akong_yin/my-repos/react-open-weather/src/js/providers/weatherbit/useWeatherBit.js");
-  reactHotLoader.register(mapCurrent, "mapCurrent", "/home/akong_yin/my-repos/react-open-weather/src/js/providers/weatherbit/useWeatherBit.js");
-  reactHotLoader.register(mapForecast, "mapForecast", "/home/akong_yin/my-repos/react-open-weather/src/js/providers/weatherbit/useWeatherBit.js");
-  reactHotLoader.register(mapData, "mapData", "/home/akong_yin/my-repos/react-open-weather/src/js/providers/weatherbit/useWeatherBit.js");
-  reactHotLoader.register(useWeatherBit, "useWeatherBit", "/home/akong_yin/my-repos/react-open-weather/src/js/providers/weatherbit/useWeatherBit.js");
-  reactHotLoader.register(_default, "default", "/home/akong_yin/my-repos/react-open-weather/src/js/providers/weatherbit/useWeatherBit.js");
+  reactHotLoader.register(SUCCESS, "SUCCESS", "/home/akong_yin/my-repos/dashboard/src/react-open-weather/src/js/providers/weatherbit/useWeatherBit.js");
+  reactHotLoader.register(FAILURE, "FAILURE", "/home/akong_yin/my-repos/dashboard/src/react-open-weather/src/js/providers/weatherbit/useWeatherBit.js");
+  reactHotLoader.register(initialState, "initialState", "/home/akong_yin/my-repos/dashboard/src/react-open-weather/src/js/providers/weatherbit/useWeatherBit.js");
+  reactHotLoader.register(fetchReducer, "fetchReducer", "/home/akong_yin/my-repos/dashboard/src/react-open-weather/src/js/providers/weatherbit/useWeatherBit.js");
+  reactHotLoader.register(formatDate, "formatDate", "/home/akong_yin/my-repos/dashboard/src/react-open-weather/src/js/providers/weatherbit/useWeatherBit.js");
+  reactHotLoader.register(mapCurrent, "mapCurrent", "/home/akong_yin/my-repos/dashboard/src/react-open-weather/src/js/providers/weatherbit/useWeatherBit.js");
+  reactHotLoader.register(mapForecast, "mapForecast", "/home/akong_yin/my-repos/dashboard/src/react-open-weather/src/js/providers/weatherbit/useWeatherBit.js");
+  reactHotLoader.register(mapData, "mapData", "/home/akong_yin/my-repos/dashboard/src/react-open-weather/src/js/providers/weatherbit/useWeatherBit.js");
+  reactHotLoader.register(useWeatherBit, "useWeatherBit", "/home/akong_yin/my-repos/dashboard/src/react-open-weather/src/js/providers/weatherbit/useWeatherBit.js");
+  reactHotLoader.register(_default, "default", "/home/akong_yin/my-repos/dashboard/src/react-open-weather/src/js/providers/weatherbit/useWeatherBit.js");
 })();
 
 ;
@@ -6740,8 +6740,8 @@ var _default = svgIcons;
     return;
   }
 
-  reactHotLoader.register(svgIcons, "svgIcons", "/home/akong_yin/my-repos/react-open-weather/src/js/svgIcons.js");
-  reactHotLoader.register(_default, "default", "/home/akong_yin/my-repos/react-open-weather/src/js/svgIcons.js");
+  reactHotLoader.register(svgIcons, "svgIcons", "/home/akong_yin/my-repos/dashboard/src/react-open-weather/src/js/svgIcons.js");
+  reactHotLoader.register(_default, "default", "/home/akong_yin/my-repos/dashboard/src/react-open-weather/src/js/svgIcons.js");
 })();
 
 ;
@@ -6788,7 +6788,7 @@ var getLabelsByLanguage = function getLabelsByLanguage(lang) {
     return;
   }
 
-  reactHotLoader.register(getLabelsByLanguage, "getLabelsByLanguage", "/home/akong_yin/my-repos/react-open-weather/src/js/utils.js");
+  reactHotLoader.register(getLabelsByLanguage, "getLabelsByLanguage", "/home/akong_yin/my-repos/dashboard/src/react-open-weather/src/js/utils.js");
 })();
 
 ;
