@@ -4,7 +4,7 @@ import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import axios from 'axios';
 
-import ReactWeather, { useOpenWeather } from 'react-open-weather';
+import ReactWeather, { useOpenWeather } from './ReactWeather.js';
 
 const WeatherPrimary = (props) => {
   const { data, isLoading, errorMessage } = useOpenWeather(props.weatherData);

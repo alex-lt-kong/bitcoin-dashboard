@@ -1,3 +1,6 @@
 [submodule "src/usb-iot-device-control"]
 	path = src/usb-iot-device-control
 	url = https://github.com/alex-lt-kong/usb-iot-device-control.git
+[submodule "src/react-open-weather"]
+	path = src/react-open-weather
+	url = https://github.com/farahat80/react-open-weather.git
