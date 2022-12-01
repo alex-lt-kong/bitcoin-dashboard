@@ -3,12 +3,14 @@ import ReactDOM from 'react-dom';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import axios from 'axios';
-
+import moment from 'moment';
 import ReactWeather, { useOpenWeather } from './ReactWeather.js';
 
 const WeatherPrimary = (props) => {
   const { data, isLoading, errorMessage } = useOpenWeather(props.weatherData);
-  console.log(props);
+  if (typeof data !== 'undefined' && data !== null) {
+    data.current.date = moment().format("YYYY-MM-DD HH:mm:ss");
+  }
   return (
       <ReactWeather
         isLoading={isLoading}
@@ -26,6 +28,9 @@ const WeatherPrimary = (props) => {
 
 const WeatherSecondary = (props) => {
   const { data, isLoading, errorMessage } = useOpenWeather(props.weatherData);
+  if (typeof data !== 'undefined' && data !== null) {
+    data.current.date = moment().format("YYYY-MM-DD HH:mm:ss");
+  }
   return (
       <ReactWeather
         isLoading={isLoading}
@@ -48,31 +53,49 @@ class Index extends React.Component {
     }
   }
 
-  componentDidMount() {
-    this.interval = setInterval(
-      () => {console.log(Date.now())},
-      1000
-    );
+  getExtWeatherData() {
+    axios.get(`../configWeatherData/`)
+    .then((response) => {
+      this.setState({weatherData: response.data});
+    })
+    .catch((error) => {
+      console.log(error);
+    });
   }
+
+  getIntTempData() {
+    axios.get(`../getTempSensorReading/`)
+    .then((response) => {
+      this.setState({tempSensorReading: response.data.data});
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+  }
+
   componentWillUnmount() {
-    clearInterval(this.interval);
+    clearInterval(this.extWeatherPollInterval);
+    clearInterval(this.intWeatherPollInterval);
   }
 
   componentDidMount() {
-    axios.get(`../configWeatherData/`)
-        .then((response) => {
-          this.setState({weatherData: response.data});
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    axios.get(`../getTempSensorReading/`)
-        .then((response) => {
-          this.setState({tempSensorReading: response.data.data});
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+    this.getExtWeatherData();
+    this.getIntTempData();
+    this.extWeatherPollInterval = setInterval(
+      () => {
+        this.getExtWeatherData();
+      },
+      3600 * 1000
+    );
+    
+    this.intWeatherPollInterval = setInterval(
+      () => {
+        this.getIntTempData();
+      },
+      10 * 1000
+    );
+
+
   }
   render() {
     

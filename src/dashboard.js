@@ -5,6 +5,7 @@ const https = require('https');
 const fs = require('fs');
 const path = require('path');
 
+
 const app = express()
 const configs = require('./config.js').configs;
 
@@ -29,7 +30,10 @@ app.use('/configWeatherData/', (req, res) => {
 });
 
 app.use('/getTempSensorReading/', (req, res) => {
-  const result = execSync(`${__dirname}/usb-iot-device-control/temp-sensor.out ${configs.tempSensorPath} 0`).toString();
+  let result = execSync(`${__dirname}/usb-iot-device-control/temp-sensor.out ${configs.tempSensorPath} 0`).toString();
+  if (result == 32767) {
+  //  result = Math.random() * 1000;
+  }
   res.json({data: parseInt(result)/10.0});
 });
 
