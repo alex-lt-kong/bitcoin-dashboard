@@ -49,6 +49,16 @@ class Index extends React.Component {
   }
 
   componentDidMount() {
+    this.interval = setInterval(
+      () => {console.log(Date.now())},
+      1000
+    );
+  }
+  componentWillUnmount() {
+    clearInterval(this.interval);
+  }
+
+  componentDidMount() {
     axios.get(`../configWeatherData/`)
         .then((response) => {
           this.setState({weatherData: response.data});
