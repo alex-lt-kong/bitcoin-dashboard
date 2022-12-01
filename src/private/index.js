@@ -141,7 +141,7 @@ class Index extends React.Component {
     return (
       <Box sx={{ flexGrow: 1 }}>
         <Grid container spacing={2}>
-          <Grid item md={6}>
+          <Grid item md={4}>
             <div>
               <WeatherPrimary
                 weatherData={this.state.weatherData.primary} tempSensorReading={this.state.tempSensorReading}
@@ -149,7 +149,7 @@ class Index extends React.Component {
               <WeatherSecondary weatherData={this.state.weatherData.secondary} />
             </div>
           </Grid>
-          <Grid item md={6}>
+          <Grid item md={8}>
             <JSONPretty id="json-pretty" data={this.state.blockData} theme={jsonPrettyTheme}></JSONPretty>
           </Grid>
         </Grid>
