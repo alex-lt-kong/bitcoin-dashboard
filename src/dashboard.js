@@ -7,7 +7,7 @@ const path = require('path');
 const axios = require('axios');
 const app = express()
 const configs = require('./config.js').configs;
-
+const moment = require('moment');
 
 
 https.createServer({
@@ -49,6 +49,7 @@ app.use('/getBlockData', async (req, res) => {
     payload['mrkl_root'] = block['mrkl_root'];
     payload['height'] = block['height'];
     payload['n_tx'] = block['n_tx'];
+    payload['time'] = moment.unix(block['time']).format();
     payload['tx'] = [];
     for (let i = 0; i < block['n_tx']; ++i) {
       payload['tx'].push({});
