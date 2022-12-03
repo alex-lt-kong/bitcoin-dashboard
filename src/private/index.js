@@ -7,7 +7,7 @@ import moment from 'moment';
 import JSONPretty from 'react-json-pretty';
 import ReactWeather, { useOpenWeather } from './ReactWeather.js';
 
-const WeatherPrimary = (props) => {
+const Weather = (props) => {
   const { data, isLoading, errorMessage } = useOpenWeather(props.weatherData);
   if (typeof data !== 'undefined' && data !== null) {
     data.current.date = moment().format("YYYY-MM-DD HH:mm:ss");
@@ -22,25 +22,6 @@ const WeatherPrimary = (props) => {
         tempSensorReading={props.tempSensorReading}
         unitsLabels={{ temperature: `°C` , windSpeed: 'Km/h' }}
         showForecast={true}
-      />
-  );
-};
-
-
-const WeatherSecondary = (props) => {
-  const { data, isLoading, errorMessage } = useOpenWeather(props.weatherData);
-  if (typeof data !== 'undefined' && data !== null) {
-    data.current.date = moment().format("YYYY-MM-DD HH:mm:ss");
-  }
-  return (
-      <ReactWeather
-        isLoading={isLoading}
-        errorMessage={errorMessage}
-        data={data}
-        lang="en"
-        locationLabel={props.weatherData.locationLabel}
-        unitsLabels={{ temperature: '°C', windSpeed: 'Km/h' }}
-        showForecast={false}
       />
   );
 };
@@ -139,21 +120,21 @@ class Index extends React.Component {
       boolean: 'color:#058b00;',
     };
     return (
-      <Box sx={{ flexGrow: 1 }}>
-        <Grid container spacing={2}>
-          <Grid item md={4}>
-            <div>
-              <WeatherPrimary
+      <>
+        <JSONPretty id="json-pretty" data={this.state.blockData} theme={jsonPrettyTheme}></JSONPretty>
+        <Box sx={{ flexGrow: 1, width: '99%', position: 'fixed', bottom: 0}}>
+          <Grid container spacing={2}>
+            <Grid item md={6}>
+              <Weather
                 weatherData={this.state.weatherData.primary} tempSensorReading={this.state.tempSensorReading}
-              /> 
-              <WeatherSecondary weatherData={this.state.weatherData.secondary} />
-            </div>
+              />
+            </Grid>
+            <Grid item md={6}>
+              <Weather weatherData={this.state.weatherData.secondary} />
+            </Grid>
           </Grid>
-          <Grid item md={8}>
-            <JSONPretty id="json-pretty" data={this.state.blockData} theme={jsonPrettyTheme}></JSONPretty>
-          </Grid>
-        </Grid>
-      </Box>
+        </Box>
+      </>
     );
   }
 }

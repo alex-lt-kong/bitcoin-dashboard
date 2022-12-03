@@ -13,8 +13,9 @@ const Today = ({ current, unitsLabels, lang, theme, tempSensorReading }) => {
       <div className="rw-today-date">{current.date}</div>
       <div className="rw-today-hr" />
       <div className="rw-today-current">
-        {current.temperature.current} {unitsLabels.temperature}
-        {typeof tempSensorReading === 'undefined' ? '' : ` / ${tempSensorReading} ${unitsLabels.temperature}` }
+        {current.temperature.current}
+        {typeof tempSensorReading === 'undefined' ? ' ' : ` / ${tempSensorReading} `}
+        {unitsLabels.temperature}
       </div>
       {hasRange && (
         <div className="rw-today-range">
