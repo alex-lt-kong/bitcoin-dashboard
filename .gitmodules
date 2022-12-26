@@ -1,3 +1,3 @@
 [submodule "src/usb-iot-device-control"]
-	path = src/usb-iot-device-control
+	path = libiotctrl
 	url = https://github.com/alex-lt-kong/usb-iot-device-control.git

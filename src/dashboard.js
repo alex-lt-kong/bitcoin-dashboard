@@ -7,6 +7,7 @@ const path = require('path');
 const axios = require('axios');
 const app = express()
 const configs = require('./config.js').configs;
+const temp_sensor = require('../libiotctrl/src/bindings/node/temp_sensor.node');
 const moment = require('moment');
 
 
@@ -28,7 +29,8 @@ app.use('/configWeatherData/', (req, res) => {
 });
 
 app.use('/getTempSensorReading/', (req, res) => {
-  let result = execSync(`${__dirname}/usb-iot-device-control/temp-sensor.out ${configs.tempSensorPath} 0`).toString();
+  let result = temp_sensor.get_temperature(configs.tempSensorPath, 0);
+  // let result = execSync(`${__dirname}/usb-iot-device-control/temp-sensor.out ${configs.tempSensorPath} 0`).toString();
   if (result == 32767) {
   //  result = Math.random() * 1000;
   }
@@ -51,7 +53,7 @@ app.use('/getBlockData', async (req, res) => {
     payload['n_tx'] = block['n_tx'];
     payload['time'] = moment.unix(block['time']).format();
     payload['tx'] = [];
-    for (let i = 0; i < block['n_tx']; ++i) {
+    for (let i = 0; i < (block['n_tx'] > 3 ? 3 : block['n_tx']); ++i) {
       payload['tx'].push({});
       payload['tx'][i]['vin_sz'] = block['tx'][i]['vin_sz'];
       payload['tx'][i]['inputs'] = [];
