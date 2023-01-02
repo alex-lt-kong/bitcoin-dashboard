@@ -92,10 +92,10 @@ class Index extends React.Component {
       [`&.${tableCellClasses.head}`]: {
         backgroundColor: `rgb(1, 129, 194)`,
         color: theme.palette.common.white,
-        fontSize: '1.5rem'
+        fontSize: '1.67rem'
       },
       [`&.${tableCellClasses.body}`]: {
-        fontSize: '1.5rem',
+        fontSize: '1.67rem',
       },
     }));
 
