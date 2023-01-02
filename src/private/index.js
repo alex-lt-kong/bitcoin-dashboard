@@ -6,6 +6,14 @@ import axios from 'axios';
 import moment from 'moment';
 import JSONPretty from 'react-json-pretty';
 import ReactWeather, { useOpenWeather } from './ReactWeather.js';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell, { tableCellClasses } from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
+import { styled } from '@mui/material/styles';
 
 const Weather = (props) => {
   const { data, isLoading, errorMessage } = useOpenWeather(props.weatherData);
@@ -27,20 +35,126 @@ const Weather = (props) => {
 };
 
 class Index extends React.Component {
+
+  onKafkaMessageReceived(msg) {
+    let newCTData = this.state.continuousTestingData;
+    for (let i = 0; i < newCTData.length; ++i) {
+      if (newCTData[i].host === msg.host) {
+        newCTData.splice(i, 1);
+      }
+    }
+    newCTData.push(msg);
+    this.setState({continuousTestingData: newCTData});
+  }
+
   constructor(props) {
     super(props);
     this.state = {
       tempSensorReading: 3276.7,
       weatherData: null,
-      blockData: null
+      blockData: null,
+      continuousTestingData: []
+    };
+    const createConnection = () => {
+      const wss_url = `wss://${window.location.hostname}:8080`;
+      console.log("WebSocket client starting...");
+      var ws = new WebSocket(wss_url);
+      console.log("WebSocket client started");
+      ws.onmessage = (event) => {
+        this.onKafkaMessageReceived(JSON.parse(event.data));
+      };
+      ws.onerror = (event) => {
+        console.error(event);
+      };
+      
+      ws.onclose = () =>{
+        // connection closed, discard old websocket and create a new one in 5s
+        ws = null
+        const timeout_ms = 30 * 1000;
+        console.warn(
+          `WebSocket client disconnected from server, ` +
+          `will retry after ${timeout_ms}ms...`
+        );
+        setTimeout(createConnection, timeout_ms);
+        // will this cause stack overflow if onclose() is called multiple times?
+        // seems the answer is no as setTimeout() is not the same as 
+        // recursive function call...
+      }
     }
+
+    createConnection();
+  }
+
+  getContinuousTestingStatusTable() {
+
+
+    const StyledTableCell = styled(TableCell)(({ theme }) => ({
+      [`&.${tableCellClasses.head}`]: {
+        backgroundColor: `rgb(1, 129, 194)`,
+        color: theme.palette.common.white,
+        fontSize: '1.5rem'
+      },
+      [`&.${tableCellClasses.body}`]: {
+        fontSize: '1.5rem',
+      },
+    }));
+
+    const StyledTableRow = styled(TableRow)(({ theme }) => ({
+      '&:nth-of-type(odd)': {
+        backgroundColor: theme.palette.action.hover,
+      },
+      // hide last border
+      '&:last-child td, &:last-child th': {
+        border: 0,
+      },
+    }));
+
+    return (
+      <TableContainer component={Paper} style={{fontSize: '2rem'}}>
+        <Table sx={{ minWidth: 460 }}>
+          <TableHead>
+          <TableRow>
+            <StyledTableCell>Hostname</StyledTableCell>
+            <StyledTableCell align="right">Update at</StyledTableCell>
+            <StyledTableCell align="right">Block Height</StyledTableCell>
+            <StyledTableCell align="right">Status</StyledTableCell>
+          </TableRow>
+          </TableHead>
+          <TableBody>
+          {this.state.continuousTestingData.map((row) => (
+            <StyledTableRow
+            key={row.host}
+            sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+            >
+              <StyledTableCell component="th" scope="row">
+                {row.host}
+              </StyledTableCell>
+              <StyledTableCell align="right">
+                {moment.unix(row.unix_ts).format()}
+              </StyledTableCell>
+              <StyledTableCell align="right">
+                {row.block_height.toLocaleString('en-US')}
+              </StyledTableCell>
+              <StyledTableCell
+                align="right" style={{ 
+                  color: (row.status == 'okay' ? "green" : "red"),
+                  fontWeight: "bold"
+                }}
+              >
+                {row.status == 'okay' ? 'okay' : 'ERROR!'}
+              </StyledTableCell>
+            </StyledTableRow>
+          ))}
+          </TableBody>
+        </Table>
+    </TableContainer>
+    );
   }
 
   getBlockData() {
     axios.get(`../getBlockData`)
     .then((response) => {
       this.setState({blockData: response.data});
-      console.log(this.state.blockData);
     })
     .catch((error) => {
       console.log(error);
@@ -121,7 +235,8 @@ class Index extends React.Component {
     };
     return (
       <>
-        <JSONPretty id="json-pretty" data={this.state.blockData} theme={jsonPrettyTheme}></JSONPretty>
+        {this.getContinuousTestingStatusTable()}
+        <JSONPretty id="json-pretty-blockdata" data={this.state.blockData} theme={jsonPrettyTheme}></JSONPretty>
         <Box sx={{ flexGrow: 1, width: '99%', position: 'fixed', bottom: 0}}>
           <Grid container spacing={2}>
             <Grid item md={6}>
