@@ -144,7 +144,7 @@ class Index extends React.Component {
                   (row.block_height - row.since_block_height) > 0 ?
                   Math.round((row.unix_ts - row.since_unix_ts) / (row.block_height - row.since_block_height)):
                   'NaN'
-                } sec/block
+                } s/blk
               </StyledTableCell>
               <StyledTableCell align="right">
                 {row.block_height.toLocaleString('en-US')}
