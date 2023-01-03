@@ -37,14 +37,22 @@ const Weather = (props) => {
 class Index extends React.Component {
 
   onKafkaMessageReceived(msg) {
-    let newCTData = this.state.continuousTestingData;
-    for (let i = 0; i < newCTData.length; ++i) {
-      if (newCTData[i].host === msg.host) {
-        newCTData.splice(i, 1);
+    let ctData = this.state.continuousTestingData;
+    for (let i = 0; i < ctData.length; ++i) {
+      if (ctData[i].host === msg.host) {
+        if (typeof ctData[i].since_unix_ts !== 'undefined' && ctData[i].block_height < msg.block_height) {
+          msg.since_unix_ts = ctData[i].since_unix_ts;
+          msg.since_block_height = ctData[i].since_block_height;
+        }
+        ctData.splice(i, 1);
       }
     }
-    newCTData.push(msg);
-    this.setState({continuousTestingData: newCTData});
+    if (typeof msg.since_unix_ts === 'undefined') {
+      msg.since_unix_ts = msg.unix_ts;
+      msg.since_block_height = msg.block_height;
+    }
+    ctData.push(msg);
+    this.setState({continuousTestingData: ctData});
   }
 
   constructor(props) {
@@ -86,16 +94,14 @@ class Index extends React.Component {
   }
 
   getContinuousTestingStatusTable() {
-
-
     const StyledTableCell = styled(TableCell)(({ theme }) => ({
       [`&.${tableCellClasses.head}`]: {
         backgroundColor: `rgb(1, 129, 194)`,
         color: theme.palette.common.white,
-        fontSize: '1.67rem'
+        fontSize: '1.6rem'
       },
       [`&.${tableCellClasses.body}`]: {
-        fontSize: '1.67rem',
+        fontSize: '1.6rem',
       },
     }));
 
@@ -115,8 +121,9 @@ class Index extends React.Component {
           <TableHead>
           <TableRow>
             <StyledTableCell>Hostname</StyledTableCell>
-            <StyledTableCell align="right">Update at</StyledTableCell>
-            <StyledTableCell align="right">Block Height</StyledTableCell>
+            <StyledTableCell align="right">Updated at</StyledTableCell>
+            <StyledTableCell align="right">Speed</StyledTableCell>
+            <StyledTableCell align="right">Height</StyledTableCell>
             <StyledTableCell align="right">Status</StyledTableCell>
           </TableRow>
           </TableHead>
@@ -131,6 +138,13 @@ class Index extends React.Component {
               </StyledTableCell>
               <StyledTableCell align="right">
                 {moment.unix(row.unix_ts).format()}
+              </StyledTableCell>
+              <StyledTableCell align="right">
+                {
+                  (row.block_height - row.since_block_height) > 0 ?
+                  Math.round((row.unix_ts - row.since_unix_ts) / (row.block_height - row.since_block_height)):
+                  'NaN'
+                } sec/block
               </StyledTableCell>
               <StyledTableCell align="right">
                 {row.block_height.toLocaleString('en-US')}
