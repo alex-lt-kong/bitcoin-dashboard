@@ -34,9 +34,6 @@ async function initKafkaAndWebSocket() {
 
   consumer.run({
     eachMessage: async ({ topic, partition, message }) => {
-      console.log({
-        value: message.value.toString(),
-      });
       wss.clients.forEach(function each(ws) {
         ws.send(message.value.toString());
       });

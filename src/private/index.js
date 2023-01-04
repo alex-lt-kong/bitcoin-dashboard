@@ -37,6 +37,7 @@ const Weather = (props) => {
 class Index extends React.Component {
 
   onKafkaMessageReceived(msg) {
+    console.log(msg);
     let ctData = this.state.continuousTestingData;
     for (let i = 0; i < ctData.length; ++i) {
       if (ctData[i].host === msg.host) {
@@ -98,10 +99,10 @@ class Index extends React.Component {
       [`&.${tableCellClasses.head}`]: {
         backgroundColor: `rgb(1, 129, 194)`,
         color: theme.palette.common.white,
-        fontSize: '1.6rem'
+        fontSize: '1.5rem'
       },
       [`&.${tableCellClasses.body}`]: {
-        fontSize: '1.6rem',
+        fontSize: '1.5rem',
       },
     }));
 
@@ -123,7 +124,7 @@ class Index extends React.Component {
             <StyledTableCell>Hostname</StyledTableCell>
             <StyledTableCell align="right">Updated at</StyledTableCell>
             <StyledTableCell align="right">Speed</StyledTableCell>
-            <StyledTableCell align="right">Height</StyledTableCell>
+            <StyledTableCell align="right">Block Height</StyledTableCell>
             <StyledTableCell align="right">Status</StyledTableCell>
           </TableRow>
           </TableHead>
@@ -137,7 +138,7 @@ class Index extends React.Component {
                 {row.host}
               </StyledTableCell>
               <StyledTableCell align="right">
-                {moment.unix(row.unix_ts).format()}
+                {moment.unix(row.unix_ts).format("YYYY-MM-DD HH:mm")}
               </StyledTableCell>
               <StyledTableCell align="right">
                 {
@@ -147,7 +148,8 @@ class Index extends React.Component {
                 } s/blk
               </StyledTableCell>
               <StyledTableCell align="right">
-                {row.block_height.toLocaleString('en-US')}
+                {row.block_height.toLocaleString('en-US')} 
+                ({moment.unix(row.block_ts).format('YYYY-MM-DD')})
               </StyledTableCell>
               <StyledTableCell
                 align="right" style={{ 
