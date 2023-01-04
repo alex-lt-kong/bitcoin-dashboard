@@ -99,10 +99,11 @@ class Index extends React.Component {
       [`&.${tableCellClasses.head}`]: {
         backgroundColor: `rgb(1, 129, 194)`,
         color: theme.palette.common.white,
-        fontSize: '1.5rem'
+        fontSize: '1.4rem',
+        fontWeight:' bold'
       },
       [`&.${tableCellClasses.body}`]: {
-        fontSize: '1.5rem',
+        fontSize: '1.4rem',
       },
     }));
 
@@ -123,8 +124,9 @@ class Index extends React.Component {
           <TableRow>
             <StyledTableCell>Hostname</StyledTableCell>
             <StyledTableCell align="right">Updated at</StyledTableCell>
-            <StyledTableCell align="right">Speed</StyledTableCell>
             <StyledTableCell align="right">Block Height</StyledTableCell>
+            <StyledTableCell align="right">Tx Count</StyledTableCell>
+            <StyledTableCell align="right">Avg Time<br/>per Block</StyledTableCell>
             <StyledTableCell align="right">Status</StyledTableCell>
           </TableRow>
           </TableHead>
@@ -138,18 +140,22 @@ class Index extends React.Component {
                 {row.host}
               </StyledTableCell>
               <StyledTableCell align="right">
-                {moment.unix(row.unix_ts).format("YYYY-MM-DD HH:mm")}
+                {moment.unix(row.unix_ts).format("YYYY-MM-DD")}<br/>
+                {moment.unix(row.unix_ts).format("HH:mm")}
+              </StyledTableCell>
+              <StyledTableCell align="right">
+                {row.block_height.toLocaleString('en-US')}<br/>
+                ({moment.unix(row.block_ts).format('YYYY-MM-DD')})
+              </StyledTableCell>
+              <StyledTableCell align="right">
+                {typeof row.tx_count === 'undefined' ? -1 : row.tx_count.toLocaleString('en-US')}
               </StyledTableCell>
               <StyledTableCell align="right">
                 {
                   (row.block_height - row.since_block_height) > 0 ?
                   Math.round((row.unix_ts - row.since_unix_ts) / (row.block_height - row.since_block_height)):
                   'NaN'
-                } s/blk
-              </StyledTableCell>
-              <StyledTableCell align="right">
-                {row.block_height.toLocaleString('en-US')} 
-                ({moment.unix(row.block_ts).format('YYYY-MM-DD')})
+                } sec
               </StyledTableCell>
               <StyledTableCell
                 align="right" style={{ 
