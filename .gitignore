@@ -1,7 +1,10 @@
 config.js
 */public/js/*.js
+block-stat.sqlite
 
+#
 # ===== Node.js =====
+#
 
 # Logs
 logs

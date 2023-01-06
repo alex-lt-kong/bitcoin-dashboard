@@ -7,12 +7,13 @@ const axios = require('axios');
 const configs = require('./config.js').configs;
 const temp_sensor = require('../libiotctrl/src/bindings/node/temp_sensor.node');
 const moment = require('moment');
-
+const sqlite3 = require('sqlite3');
+const databasePath = path.join(__dirname, 'block-stat.sqlite');
 
 async function initKafkaAndWebSocket() {
   const { Kafka } = require('kafkajs');
   const kafka = new Kafka(configs.kafka.KafkaConfig);
-  const consumer = kafka.consumer({ groupId: 'test-group' })
+  const consumer = kafka.consumer({ groupId: 'test-group1' })
 
   await consumer.connect();
   await consumer.subscribe({
@@ -34,9 +35,45 @@ async function initKafkaAndWebSocket() {
 
   consumer.run({
     eachMessage: async ({ topic, partition, message }) => {
+      console.log(message.value.toString());
       wss.clients.forEach(function each(ws) {
         ws.send(message.value.toString());
       });
+      const msgJson = JSON.parse(message.value.toString());
+      const db = new sqlite3.Database(databasePath, (err) => {
+        if (err) {
+          console.error(err.message);
+        } else {
+          const sql = 'SELECT * FROM block_test_result WHERE block_height = ?';
+          db.all(sql, [msgJson.block_height], (err, rows) => {
+            if (err) {
+              console.error(err.message);
+            } else if (msgJson.status === 'okay') {
+              if (rows.length > 0) {
+                db.run(
+                  "UPDATE block_test_result SET script_test_unix_ts=?, test_host=? WHERE block_height=?",
+                  [Math.floor(+new Date() / 1000), msgJson.host, msgJson.block_height],
+                  (err,rows) => {
+                    if (err) {
+                      console.log(err.message);
+                    }
+                });
+              } else {
+                db.run(
+                  "INSERT INTO block_test_result (script_test_unix_ts, test_host, block_height) VALUES (?, ?, ?)",
+                  [Math.floor(+new Date() / 1000), msgJson.host, msgJson.block_height],
+                  (err,rows) => {
+                    if (err) {
+                      console.log(err.message);
+                    }
+                });
+              }
+            }
+          });
+        }
+      });
+      db.close();
+      
     },
   });
 }
