@@ -2,6 +2,7 @@ build/
 config.js
 */public/js/*.js
 block-stat.sqlite
+*.sqlite-journal
 
 #
 # ===== Node.js =====
