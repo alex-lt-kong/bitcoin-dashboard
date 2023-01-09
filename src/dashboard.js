@@ -14,7 +14,7 @@ const enc_key = CryptoJS.enc.Utf8.parse(configs.kafka.enc_key);
 async function initKafkaAndWebSocket() {
   const { Kafka } = require('kafkajs');
   const kafka = new Kafka(configs.kafka.KafkaConfig);
-  const consumer = kafka.consumer({ groupId: 'test-group' })
+  const consumer = kafka.consumer({ groupId: 'test-group2' })
 
   await consumer.connect();
   await consumer.subscribe({
@@ -42,39 +42,37 @@ async function initKafkaAndWebSocket() {
         ws.send(decrypted_msg);
       });
       const msgJson = JSON.parse(decrypted_msg);
-      const db = new sqlite3.Database(databasePath, (err) => {
-        if (err) {
-          console.error(err.message);
-        } else {
-          const sql = 'SELECT * FROM block_test_result WHERE block_height = ?';
-          db.all(sql, [msgJson.block_height], (err, rows) => {
-            if (err) {
-              console.error(err.message);
-            } else if (msgJson.status === 'okay') {
-              if (rows.length > 0) {
-                db.run(
-                  "UPDATE block_test_result SET script_test_unix_ts=?, test_host=? WHERE block_height=?",
-                  [Math.floor(+new Date() / 1000), msgJson.host, msgJson.block_height],
-                  (err,rows) => {
-                    if (err) {
-                      console.log(err.message);
-                    }
-                });
-              } else {
-                db.run(
-                  "INSERT INTO block_test_result (script_test_unix_ts, test_host, block_height) VALUES (?, ?, ?)",
-                  [Math.floor(+new Date() / 1000), msgJson.host, msgJson.block_height],
-                  (err,rows) => {
-                    if (err) {
-                      console.log(err.message);
-                    }
-                });
-              }
+      const db = new sqlite3.Database(databasePath);
+      db.serialize(() => {
+        const sql = 'SELECT * FROM block_test_result WHERE block_height = ?';
+        db.configure('busyTimeout', 5000);
+        db.all(sql, [msgJson.block_height], (err, rows) => {
+          if (err) {
+            console.error(err.message);
+          } else if (msgJson.status === 'okay') {
+            if (rows.length > 0) {
+              db.run(
+                "UPDATE block_test_result SET script_test_unix_ts=?, test_host=? WHERE block_height=?",
+                [Math.floor(+new Date() / 1000), msgJson.host, msgJson.block_height],
+                (err,rows) => {
+                  if (err) {
+                    console.log(err.message);
+                  }
+              });
+            } else {
+              db.run(
+                "INSERT INTO block_test_result (script_test_unix_ts, test_host, block_height) VALUES (?, ?, ?)",
+                [Math.floor(+new Date() / 1000), msgJson.host, msgJson.block_height],
+                (err,rows) => {
+                  if (err) {
+                    console.log(err.message);
+                  }
+              });
             }
-          });
-        }
+          }
+        });
       });
-      db.close();
+      // db.close(); don't close() it, will create issue. Leaving it to GC...
       
     },
   });
@@ -101,8 +99,12 @@ function initHTTPServer() {
   });
 
   app.use('/getTempSensorReading/', (req, res) => {
-    let result = temp_sensor.get_temperature(configs.tempSensorPath, 0);
-    res.json({data: parseInt(result)/10.0});
+    if (typeof configs.tempSensorPath === 'undefined' || configs.tempSensorPath === '') {
+      res.json({data: 32767/10.0});
+    } else {
+      let result = temp_sensor.get_temperature(configs.tempSensorPath, 0);
+      res.json({data: parseInt(result)/10.0});
+    }
   });
 
   app.use('/getBlockData', async (req, res) => {
@@ -163,6 +165,7 @@ function initHTTPServer() {
             if (err) {
               console.error(err.message);
             }
+            console.log(i, rows[0]['COUNT(*)'] / oneHundredthBlockCount);
             progressFlag[i] = Math.round(rows[0]['COUNT(*)'] / oneHundredthBlockCount);
           });
         }
