@@ -14,7 +14,7 @@ const enc_key = CryptoJS.enc.Utf8.parse(configs.kafka.enc_key);
 async function initKafkaAndWebSocket() {
   const { Kafka } = require('kafkajs');
   const kafka = new Kafka(configs.kafka.KafkaConfig);
-  const consumer = kafka.consumer({ groupId: 'test-group1' })
+  const consumer = kafka.consumer({ groupId: 'test-group' })
 
   await consumer.connect();
   await consumer.subscribe({
@@ -148,6 +148,49 @@ function initHTTPServer() {
     }
     
     res.json(payload);
+  });
+  app.use('/getTestProgress', async (req, res) => {
+    const latestBlockHeight = 700000;
+    const oneHundredthBlockCount = Math.floor(latestBlockHeight / 100);
+    let progressFlag = Array(100);
+    const db = new sqlite3.Database(databasePath, (err) => {
+      const sql = 'SELECT COUNT(*) FROM block_test_result WHERE block_height >= ? AND block_height < ?';
+      if (err) {
+        console.error(err.message);
+      } else {
+        for (let i = 0; i < 100; ++i) {
+          db.all(sql, [oneHundredthBlockCount * i, oneHundredthBlockCount * (i+1)], (err, rows) => {
+            if (err) {
+              console.error(err.message);
+            }
+            progressFlag[i] = Math.round(rows[0]['COUNT(*)'] / oneHundredthBlockCount);
+          });
+        }
+      }
+    });
+    db.close(() => {
+      console.log(progressFlag);
+      let payload = Array(1);
+      let sectionCount = 0;
+
+      payload[sectionCount] = {
+        flag: progressFlag[0],
+        value: 1
+      };
+      for (let i = 1; i < 100; ++i) {
+        if (progressFlag[i] == progressFlag[i - 1]) {
+          payload[sectionCount].value += 1;
+        } else {
+          sectionCount += 1;
+          payload.push({
+            flag: progressFlag[i],
+            value: 1
+          });
+        }
+      }
+      res.json({'progress': payload});
+    });
+
   });
 
   app.use('/', (req, res) => {

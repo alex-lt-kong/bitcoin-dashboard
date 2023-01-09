@@ -14,6 +14,8 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { styled } from '@mui/material/styles';
+import ProgressBar from 'react-bootstrap/ProgressBar';
+
 
 const Weather = (props) => {
   const { data, isLoading, errorMessage } = useOpenWeather(props.weatherData);
@@ -62,6 +64,7 @@ class Index extends React.Component {
       tempSensorReading: 3276.7,
       weatherData: null,
       blockData: null,
+      progressData: null,
       continuousTestingData: []
     };
     const createConnection = () => {
@@ -92,6 +95,26 @@ class Index extends React.Component {
     }
 
     createConnection();
+  }
+
+  getTestProgressData() {
+    axios.get(`../getTestProgress/`)
+    .then((response) => {
+      this.setState({progressData: response.data.progress});
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+  }
+
+  getTestProgressBar() {
+    return (
+      <ProgressBar>
+        {this.state.progressData.map((row) => (
+          <ProgressBar variant={row.flag == 1 ? 'primary': 'light'} now={row.value} />
+        ))}
+      </ProgressBar>
+    );
   }
 
   getContinuousTestingStatusTable() {
@@ -214,6 +237,7 @@ class Index extends React.Component {
     this.getExtWeatherData();
     this.getIntTempData();
     this.getBlockData();
+    this.getTestProgressData();
 
     this.extWeatherPollInterval = setInterval(
       () => {
@@ -242,8 +266,8 @@ class Index extends React.Component {
     if (this.state === null) {
       return null;
     }
-    if (this.state.weatherData === null || this.state.blockData === null) {
-      console.warn("Nothing is render()'ed");
+    if (this.state.weatherData === null || this.state.blockData === null || this.state.progressData === null) {
+      console.warn("Nothing is render()'ed as some data are not ready");
       return null;
     }
     // The theme follows Firefox's JSON style
@@ -258,6 +282,7 @@ class Index extends React.Component {
     return (
       <>
         {this.getContinuousTestingStatusTable()}
+        {this.getTestProgressBar()}
         <JSONPretty id="json-pretty-blockdata" data={this.state.blockData} theme={jsonPrettyTheme}></JSONPretty>
         <Box sx={{ flexGrow: 1, width: '99%', position: 'fixed', bottom: 0}}>
           <Grid container spacing={2}>
