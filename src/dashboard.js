@@ -7,14 +7,14 @@ const axios = require('axios');
 const configs = require('./config.js').configs;
 const temp_sensor = require('../libiotctrl/src/bindings/node/temp_sensor.node');
 const moment = require('moment');
-const sqlite3 = require('sqlite3');
 const databasePath = path.join(__dirname, 'block-stat.sqlite');
+const os = require("os");
 const enc_key = CryptoJS.enc.Utf8.parse(configs.kafka.enc_key);
 
 async function initKafkaAndWebSocket() {
   const { Kafka } = require('kafkajs');
   const kafka = new Kafka(configs.kafka.KafkaConfig);
-  const consumer = kafka.consumer({ groupId: 'test-group2' })
+  const consumer = kafka.consumer({ groupId: os.hostname() })
 
   await consumer.connect();
   await consumer.subscribe({
@@ -42,37 +42,29 @@ async function initKafkaAndWebSocket() {
         ws.send(decrypted_msg);
       });
       const msgJson = JSON.parse(decrypted_msg);
-      const db = new sqlite3.Database(databasePath);
-      db.serialize(() => {
-        const sql = 'SELECT * FROM block_test_result WHERE block_height = ?';
-        db.configure('busyTimeout', 5000);
-        db.all(sql, [msgJson.block_height], (err, rows) => {
-          if (err) {
-            console.error(err.message);
-          } else if (msgJson.status === 'okay') {
-            if (rows.length > 0) {
-              db.run(
-                "UPDATE block_test_result SET script_test_unix_ts=?, test_host=? WHERE block_height=?",
-                [Math.floor(+new Date() / 1000), msgJson.host, msgJson.block_height],
-                (err,rows) => {
-                  if (err) {
-                    console.log(err.message);
-                  }
-              });
-            } else {
-              db.run(
-                "INSERT INTO block_test_result (script_test_unix_ts, test_host, block_height) VALUES (?, ?, ?)",
-                [Math.floor(+new Date() / 1000), msgJson.host, msgJson.block_height],
-                (err,rows) => {
-                  if (err) {
-                    console.log(err.message);
-                  }
-              });
-            }
-          }
-        });
+      const db = require('better-sqlite3')(databasePath);
+      db.pragma('journal_mode = WAL');
+      let stmt = db.prepare('SELECT * FROM block_test_result WHERE block_height = @block_height');
+      rows = stmt.all({'block_height': msgJson.block_height});
+      if (rows.length == 0) {
+        stmt = db.prepare(`
+          INSERT INTO block_test_result (script_test_unix_ts, test_host, block_height)
+          VALUES (@script_test_unix_ts, @test_host, @block_height)
+        `);
+      } else {
+        stmt = db.prepare(`
+          UPDATE block_test_result
+          SET script_test_unix_ts=@script_test_unix_ts, test_host=@test_host
+          WHERE block_height=@block_height
+        `);
+        
+      }
+      stmt.run({
+        'script_test_unix_ts': Math.floor(+new Date() / 1000),
+        'test_host': msgJson.host,
+        'block_height': msgJson.block_height
       });
-      // db.close(); don't close() it, will create issue. Leaving it to GC...
+      db.close();
       
     },
   });
@@ -155,44 +147,41 @@ function initHTTPServer() {
     const latestBlockHeight = 700000;
     const oneHundredthBlockCount = Math.floor(latestBlockHeight / 100);
     let progressFlag = Array(100);
-    const db = new sqlite3.Database(databasePath, (err) => {
-      const sql = 'SELECT COUNT(*) FROM block_test_result WHERE block_height >= ? AND block_height < ?';
-      if (err) {
-        console.error(err.message);
-      } else {
-        for (let i = 0; i < 100; ++i) {
-          db.all(sql, [oneHundredthBlockCount * i, oneHundredthBlockCount * (i+1)], (err, rows) => {
-            if (err) {
-              console.error(err.message);
-            }
-            console.log(i, rows[0]['COUNT(*)'] / oneHundredthBlockCount);
-            progressFlag[i] = Math.round(rows[0]['COUNT(*)'] / oneHundredthBlockCount);
-          });
-        }
-      }
-    });
-    db.close(() => {
-      console.log(progressFlag);
-      let payload = Array(1);
-      let sectionCount = 0;
+    const db = require('better-sqlite3')(databasePath, { readonly: true });
+    let stmt = db.prepare(`
+      SELECT COUNT(*) FROM block_test_result
+      WHERE block_height >= @block_height_min AND block_height < @block_height_max
+    `);      
+    for (let i = 0; i < 100; ++i) {
+      rows = stmt.all({
+        'block_height_min': oneHundredthBlockCount * i,
+        'block_height_max': oneHundredthBlockCount * (i+1),
+      });
+      console.log(i, rows[0]['COUNT(*)'] / oneHundredthBlockCount);
+      progressFlag[i] = Math.round(rows[0]['COUNT(*)'] / oneHundredthBlockCount);
+    }
 
-      payload[sectionCount] = {
-        flag: progressFlag[0],
-        value: 1
-      };
-      for (let i = 1; i < 100; ++i) {
-        if (progressFlag[i] == progressFlag[i - 1]) {
-          payload[sectionCount].value += 1;
-        } else {
-          sectionCount += 1;
-          payload.push({
-            flag: progressFlag[i],
-            value: 1
-          });
-        }
+    db.close();
+    console.log(progressFlag);
+    let payload = Array(1);
+    let sectionCount = 0;
+
+    payload[sectionCount] = {
+      flag: progressFlag[0],
+      value: 1
+    };
+    for (let i = 1; i < 100; ++i) {
+      if (progressFlag[i] == progressFlag[i - 1]) {
+        payload[sectionCount].value += 1;
+      } else {
+        sectionCount += 1;
+        payload.push({
+          flag: progressFlag[i],
+          value: 1
+        });
       }
-      res.json({'progress': payload});
-    });
+    }
+    res.json({'progress': payload});
 
   });
 

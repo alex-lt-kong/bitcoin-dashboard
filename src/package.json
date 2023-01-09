@@ -25,6 +25,7 @@
     "@mui/icons-material": "^5.10.14",
     "@mui/material": "^5.10.14",
     "axios": "^0.27.2",
+    "better-sqlite3": "^8.0.1",
     "bootstrap": "^5.2.3",
     "crypto-js": "^4.1.1",
     "express": "^4.18.1",
