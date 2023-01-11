@@ -3,6 +3,7 @@ config.js
 */public/js/*.js
 block-stat.sqlite
 *.sqlite-journal
+chart.png
 
 #
 # ===== Node.js =====
