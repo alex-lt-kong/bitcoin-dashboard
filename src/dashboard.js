@@ -48,13 +48,13 @@ async function initKafkaAndWebSocket() {
       rows = stmt.all({'block_height': msgJson.block_height});
       if (rows.length == 0) {
         stmt = db.prepare(`
-          INSERT INTO block_test_result (script_test_unix_ts, test_host, block_height)
-          VALUES (@script_test_unix_ts, @test_host, @block_height)
+          INSERT INTO block_test_result (script_test_unix_ts, test_host, block_height, tx_count)
+          VALUES (@script_test_unix_ts, @test_host, @block_height, @tx_count)
         `);
       } else {
         stmt = db.prepare(`
           UPDATE block_test_result
-          SET script_test_unix_ts=@script_test_unix_ts, test_host=@test_host
+          SET script_test_unix_ts=@script_test_unix_ts, test_host=@test_host, tx_count=@tx_count
           WHERE block_height=@block_height
         `);
         
@@ -62,6 +62,7 @@ async function initKafkaAndWebSocket() {
       stmt.run({
         'script_test_unix_ts': Math.floor(+new Date() / 1000),
         'test_host': msgJson.host,
+        'tx_count': msgJson.tx_count,
         'block_height': msgJson.block_height
       });
       db.close();
@@ -144,7 +145,10 @@ function initHTTPServer() {
     res.json(payload);
   });
   app.use('/getTestProgress', async (req, res) => {
-    const latestBlockHeight = 700000;
+    let response = await axios.get(
+      'https://blockchain.info/latestblock'
+    );
+    const latestBlockHeight = response.data.height;
     const oneHundredthBlockCount = Math.floor(latestBlockHeight / 100);
     let progressFlag = Array(100);
     const db = require('better-sqlite3')(databasePath, { readonly: true });
