@@ -283,6 +283,7 @@ class Index extends React.Component {
       <>
         {this.getContinuousTestingStatusTable()}
         {this.getTestProgressBar()}
+        <img style={{width: '100%'}}src="../img/chart.png"/>
         <JSONPretty id="json-pretty-blockdata" data={this.state.blockData} theme={jsonPrettyTheme}></JSONPretty>
         <Box sx={{ flexGrow: 1, width: '99%', position: 'fixed', bottom: 0}}>
           <Grid container spacing={2}>
