@@ -15,7 +15,9 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { styled } from '@mui/material/styles';
 import ProgressBar from 'react-bootstrap/ProgressBar';
-
+import Col from 'react-bootstrap/Col';
+import Form from 'react-bootstrap/Form';
+import Row from 'react-bootstrap/Row';
 
 const Weather = (props) => {
   const { data, isLoading, errorMessage } = useOpenWeather(props.weatherData);

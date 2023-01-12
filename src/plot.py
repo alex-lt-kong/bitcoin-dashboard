@@ -26,11 +26,12 @@ for i in range(interval):
         (i * interval, (i+1) * interval)
     )
     rows = res.fetchall()
-    # tx_counts[i] = 0 if rows[0][0] is None else rows[0][0]
-    tx_counts[i] = rows[0][0]
+    tx_counts[i] = 0 if rows[0][0] is None else rows[0][0]
+    #tx_counts[i] = rows[0][0]
 
 fig, ax = plt.subplots(figsize=(48, 6))
-
-ax.tick_params(axis='both', which='major', labelsize=32)
+ax.margins(0)
+ax.tick_params(axis='x', which='major', labelsize=32)
+ax.tick_params(axis='y', which='major', labelsize=0)
 ax.plot(tx_counts, linewidth=4)
 plt.savefig(os.path.join(app_dir, 'public/img/chart.png'), bbox_inches='tight')
