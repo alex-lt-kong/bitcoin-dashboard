@@ -13,7 +13,7 @@ latest_height = latest_block['height']
 
 one_thousandth_block_count = latest_height // interval
 tx_counts = [0] * interval
-
+labels = [1] * interval
 
 con = sqlite3.connect(f'file:{app_dir}/block-stat.sqlite?mode=ro', uri=True)
 cur = con.cursor()
@@ -23,15 +23,16 @@ for i in range(interval):
         SELECT SUM(tx_count) FROM block_test_result
         WHERE block_height >= ? AND block_height < ?
         ''',
-        (i * interval, (i+1) * interval)
+        (i * one_thousandth_block_count, (i+1) * one_thousandth_block_count)
     )
     rows = res.fetchall()
     tx_counts[i] = 0 if rows[0][0] is None else rows[0][0]
-    #tx_counts[i] = rows[0][0]
+    # tx_counts[i] = rows[0][0]
+    labels[i] = i * one_thousandth_block_count
 
 fig, ax = plt.subplots(figsize=(48, 6))
 ax.margins(0)
 ax.tick_params(axis='x', which='major', labelsize=32)
 ax.tick_params(axis='y', which='major', labelsize=0)
-ax.plot(tx_counts, linewidth=4)
+ax.plot(labels, tx_counts, linewidth=6)
 plt.savefig(os.path.join(app_dir, 'public/img/chart.png'), bbox_inches='tight')
