@@ -144,6 +144,7 @@ function initHTTPServer() {
     
     res.json(payload);
   });
+  
   app.use('/getTestProgress', async (req, res) => {
     let response = await axios.get(
       'https://blockchain.info/latestblock'
