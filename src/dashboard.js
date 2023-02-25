@@ -1,20 +1,20 @@
 
-const CryptoJS = require("crypto-js");
+const CryptoJS = require('crypto-js');
 const https = require('https');
 const fs = require('fs');
 const path = require('path');
 const axios = require('axios');
 const configs = require('./config.js').configs;
-const temp_sensor = require('../libiotctrl/src/bindings/node/temp_sensor.node');
+const tempSensor = require('../libiotctrl/src/bindings/node/temp_sensor.node');
 const moment = require('moment');
 const databasePath = path.join(__dirname, 'block-stat.sqlite');
-const os = require("os");
-const enc_key = CryptoJS.enc.Utf8.parse(configs.kafka.enc_key);
+const os = require('os');
+const encryptionKey = CryptoJS.enc.Utf8.parse(configs.kafka.enc_key);
 
 async function initKafkaAndWebSocket() {
-  const { Kafka } = require('kafkajs');
+  const {Kafka} = require('kafkajs');
   const kafka = new Kafka(configs.kafka.KafkaConfig);
-  const consumer = kafka.consumer({ groupId: os.hostname() })
+  const consumer = kafka.consumer({groupId: os.hostname()});
 
   await consumer.connect();
   await consumer.subscribe({
@@ -26,7 +26,7 @@ async function initKafkaAndWebSocket() {
     key: fs.readFileSync(configs.ssl.key),
     cert: fs.readFileSync(configs.ssl.crt)
   }).listen(8080)});
-  
+
   wss.on('connection', (ws) => {
     console.log(
       `A new client connected, current connections: ${wss.clients.size}`
@@ -34,14 +34,18 @@ async function initKafkaAndWebSocket() {
   });
 
   consumer.run({
-    eachMessage: async ({ topic, partition, message }) => {      
-      var decrypted =  CryptoJS.AES.decrypt(message.value.toString('base64'), enc_key, {mode:CryptoJS.mode.ECB});
-      let decrypted_msg = (decrypted.toString(CryptoJS.enc.Utf8));
+    eachMessage: async ({topic, partition, message}) => {
+      const decrypted = CryptoJS.AES.decrypt(
+        message.value.toString('base64'),
+        encryptionKey,
+        {mode: CryptoJS.mode.ECB}
+      );
+      const decryptedMsg = (decrypted.toString(CryptoJS.enc.Utf8));
 
       wss.clients.forEach(function each(ws) {
-        ws.send(decrypted_msg);
+        ws.send(decryptedMsg);
       });
-      const msgJson = JSON.parse(decrypted_msg);
+      const msgJson = JSON.parse(decryptedMsg);
       const db = require('better-sqlite3')(databasePath);
       db.pragma('journal_mode = WAL');
       let stmt = db.prepare('SELECT * FROM block_test_result WHERE block_height = @block_height');
@@ -57,7 +61,6 @@ async function initKafkaAndWebSocket() {
           SET script_test_unix_ts=@script_test_unix_ts, test_host=@test_host, tx_count=@tx_count
           WHERE block_height=@block_height
         `);
-        
       }
       stmt.run({
         'script_test_unix_ts': Math.floor(+new Date() / 1000),
@@ -66,24 +69,23 @@ async function initKafkaAndWebSocket() {
         'block_height': msgJson.block_height
       });
       db.close();
-      
-    },
+    }
   });
 }
 
 function initHTTPServer() {
   const express = require('express');
-  const app = express()
+  const app = express();
   https.createServer({
     key: fs.readFileSync(configs.ssl.key),
     cert: fs.readFileSync(configs.ssl.crt)
   },
   app)
-  .listen(configs.port, function() {
-    console.log(
-      `dashboard.js listening on https://0.0.0.0:${configs.port}!`
-    );
-  });
+    .listen(configs.port, function() {
+      console.log(
+        `dashboard.js listening on https://0.0.0.0:${configs.port}!`
+      );
+    });
 
   app.use('/', express.static(path.join(__dirname, 'public/')));
 
@@ -95,7 +97,7 @@ function initHTTPServer() {
     if (typeof configs.tempSensorPath === 'undefined' || configs.tempSensorPath === '') {
       res.json({data: 32767/10.0});
     } else {
-      let result = temp_sensor.get_temperature(configs.tempSensorPath, 0);
+      const result = tempSensor.get_temperature(configs.tempSensorPath, 0);
       res.json({data: parseInt(result)/10.0});
     }
   });
@@ -113,7 +115,7 @@ function initHTTPServer() {
       );
       const block = response.data.blocks[0];
       // console.log(block);
-      
+
       payload['hash'] = block['hash'];
       payload['mrkl_root'] = block['mrkl_root'];
       payload['height'] = block['height'];
